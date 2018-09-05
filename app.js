@@ -60,15 +60,6 @@ axios.get(geoCodeURL)
   
     recordCurrentData(response.data.currently);
     recordDailyData(response.data.daily);
-    // fetchedData.current.temperature = Math.round(response.data.currently.temperature);
-    // fetchedData.current.apparentTemperature = Math.round(response.data.currently.apparentTemperature);
-    // fetchedData.current.apparentTemperatureHigh = Math.round(response.data.daily.apparentTemperatureHigh);
-    // fetchedData.current.ozone = Math.round(response.data.daily.ozone);
-    // fetchedData.current.uvIndex = Math.round(response.data.daily.uvIndex);
-    
-    // console.log(JSON.stringify(response.data.daily.data[0], undefined, 2));
-    console.log(JSON.stringify(fetchedData, undefined, 2));
-    
     
     console.log(`The temperature in ${fetchedData.location.name} is ${fetchedData.current.temperature} but it feels like ${fetchedData.current.apparentTemperature}`);
   })
