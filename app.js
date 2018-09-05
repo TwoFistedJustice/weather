@@ -1,3 +1,5 @@
+const weatherURL = `https://api.darksky.net/forecast/f250587e5f444faf3f0455781977444a/34.135653,-117.8287845`;
+const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
 const yargs = require('yargs');
 const axios = require('axios');
 const config = require('../config/config');
@@ -19,32 +21,50 @@ const argv = yargs
 var encodedAddress = encodeURIComponent(argv.address);
 var geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
 
+var fetchedData = {
+  location: {
+    name: null,
+    lat: 34.135653,
+    lng: -117.8287845,
+    formatted: null
+  },
+  placeName: null,
+  current: {
+    temperature: null,
+    apparentTemperature: null,
+    uvIndex: null
+  },
+  daily: {
+    summary: null,
+    temperatureHigh: null,
+    apparentTemperatureHigh:null,
+    ozone: null,
+    uvindex: null
+  },
+  time: {
+    apparentTemperatureHighTime:null,
+    uvIndexTime:null
+  }};
+
 axios.get(geoCodeURL)
  .then((response) => {
    if (response.data.status === 'ZERO_RESULTS') {
      throw new Error('Gack! Address not found! What do I do? What do I DOOOO???');
    }
+
+   fetchedData.location.lat = response.data.results[0].geometry.location.lat;
+   fetchedData.location.lng = response.data.results[0].geometry.location.lng;
+   fetchedData.location.formatted = response.data.results[0].formatted_address;
    
-   var loc = {
-     lat: response.data.results[0].geometry.location.lat,
-     lng: response.data.results[0].geometry.location.lng,
-     address: response.data.results[0].formatted_address
-   };
+   var weather = `https://api.darksky.net/forecast/${darkSkyKey}/${fetchedData.location.lat},${fetchedData.location.lng}`;
+   fetchedData.location.name = response.data.results[0].address_components[1].short_name;
    
-   // var lat = response.data.results[0].geometry.location.lat;
-   // var lng = response.data.results[0].geometry.location.lng;
-   // var formattedAddress = response.data.results[0].formatted_address;
-   var weather = `https://api.darksky.net/forecast/${darkSkyKey}/${loc.lat},${loc.lng}`;
-   
-   // console.log(response.data);
-   // console.log(JSON.stringify(response.data, undefined, 2));
-   console.log(loc.address);
    return axios.get(weather);
  })
   .then((response)=>{
     let temp = Math.round(response.data.currently.temperature);
     let apparentTemp = Math.round(response.data.currently.apparentTemperature);
-    console.log(`The temperature is ${temp} but it feels like ${apparentTemp}`);
+    console.log(`The temperature in ${fetchedData.location.name} is ${temp} but it feels like ${apparentTemp}`);
     
   })
   .catch((err)=>{
