@@ -116,12 +116,13 @@ var displayWeatherReport = () => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
   let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
+  let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
   
   console.log(`${fetchedData.location.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
   console.log(`It will feel the hottest at ${hottestApparentTime}`);
-  console.log(`Maximum UV exposure will at ${uvHighTime}. The level will be [high to low]. Sunburns are [unlikely to likely]`);
+  console.log(`Maximum UV exposure will ${uvRating} and will be highest at ${uvHighTime}. [WARNINGS]`);
   console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
 };
 
