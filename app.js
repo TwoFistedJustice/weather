@@ -1,10 +1,13 @@
 const weatherURL = `https://api.darksky.net/forecast/f250587e5f444faf3f0455781977444a/34.135653,-117.8287845`;
-const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
+const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
+const testmapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=TBKmAtXk5k1zAzAQwPc1sCeuVnGiLB22&location=1301%20lombard%20street%20philadelphia`
+
 const yargs = require('yargs');
 const axios = require('axios');
-const config = require('../config/config');
+const config = require('../../config/config');
 const darkSkyKey = config.darkSkyKey;
-
+const mapQuestKey = config.mapQuestNodeWeatherKey;
+const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
 const argv = yargs
   .options({
     a: {
@@ -19,14 +22,14 @@ const argv = yargs
   .argv;
 
 const encodedAddress = encodeURIComponent(argv.address);
-const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
+// const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
+const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
 
 var fetchedData = {
   location: {
     name: null,
     lat: 34.135653,
-    lng: -117.8287845,
-    formatted: null
+    lng: -117.8287845
   },
   current: {
     temperature: null,
@@ -47,11 +50,15 @@ var fetchedData = {
 
 axios.get(geoCodeURL)
  .then((response) => {
-   if (response.data.status === 'ZERO_RESULTS') {
-     throw new Error('Gack! Address not found! What do I do? What do I DOOOO???');
+   let errorcode = response.data.info.statuscode;
+   if ( errorcode === 400) {
+     throw new Error('Input error. You probably typed something wrong. Make sure you are passing a valid URL.');
+   } else if (errorcode === 403) {
+     throw new Error('Something is wrong with the API key. Make sure it is valid.');
+   } else if (errorcode === 500) {
+     throw new Error('Make sure you are entering a valid location, then try again.')
    }
-   
-   recordLocationData(response.data.results[0]);
+   recordLocationData(response.data.results[0].locations[0]);
    
    var weatherData = `https://api.darksky.net/forecast/${darkSkyKey}/${fetchedData.location.lat},${fetchedData.location.lng}`;
    return axios.get(weatherData);
@@ -60,23 +67,22 @@ axios.get(geoCodeURL)
   
     recordCurrentData(response.data.currently);
     recordDailyData(response.data.daily);
-    
-    console.log(`The temperature in ${fetchedData.location.name} is ${fetchedData.current.temperature} but it feels like ${fetchedData.current.apparentTemperature}`);
+    console.log(fetchedData);
+    displayWeatherReport();
   })
   .catch((err)=>{
    if(err.code === 'ENOTFOUND') {
      console.log("Unable to connect to server. Why won't the other computers talk to me???");
    } else {
-     console.log('thrown from .catch block',err.message);
+     console.log(err.message);
    }
 });
 
 var recordLocationData = (geoResults) => {
   //geoReults is response.data.results[0]
-  fetchedData.location.name = geoResults.address_components[1].short_name;
-  fetchedData.location.lat = geoResults.geometry.location.lat;
-  fetchedData.location.lng = geoResults.geometry.location.lng;
-  fetchedData.location.formatted = geoResults.formatted_address;
+  fetchedData.location.name = geoResults.adminArea5;
+  fetchedData.location.lat = geoResults.latLng.lat;
+  fetchedData.location.lng = geoResults.latLng.lng;
 };
 
 var recordCurrentData = (currently) => {
@@ -87,7 +93,7 @@ var recordCurrentData = (currently) => {
 };
 
 var recordDailyData = (daily) => {
-  console.log(JSON.stringify(daily.data[0], undefined, 2));
+  // console.log(JSON.stringify(daily.data[0], undefined, 2));
   fetchedData.daily.summaryWeekly = daily.summary;
   fetchedData.daily.temperatureHigh = Math.round(daily.data[0].temperatureHigh);
   fetchedData.daily.apparentTemperatureHigh = Math.round(daily.data[0].apparentTemperatureHigh);
@@ -95,5 +101,24 @@ var recordDailyData = (daily) => {
   fetchedData.daily.uvIndex = Math.round(daily.data[0].uvIndex);
   fetchedData.time.apparentTemperatureHighTime = daily.data[0].apparentTemperatureHighTime;
   fetchedData.time.uvIndexTime = daily.data[0].uvIndexTime;
+};
+
+var interpretUVIndex = () => {};
+var interpretOzoneLevel = () => {};
+
+
+var displayWeatherReport = () => {
+  console.log(`${fetchedData.location.name}:`);
+  console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
+  console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at [TIME].`)
+  console.log(`It will feel the hottest at [TIME]`);
+  console.log(`The UV radiation level will be [high to low]. Sunburns are [unlikely to likely]`);
+  console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
   
 };
+
+
+
+
+
+// https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
