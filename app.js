@@ -48,6 +48,7 @@ var fetchedData = {
   time: {
     timeZone: null,
     apparentTemperatureHighTime:null,
+    temperatureHighTime: null,
     uvIndexTime:null
   }};
 
@@ -103,6 +104,7 @@ var recordDailyData = (daily) => {
   fetchedData.daily.ozone = Math.round(daily.data[0].ozone);
   fetchedData.daily.uvIndex = Math.round(daily.data[0].uvIndex);
   fetchedData.time.apparentTemperatureHighTime = daily.data[0].apparentTemperatureHighTime;
+  fetchedData.time.temperatureHighTime = daily.data[0].temperatureHighTime;
   fetchedData.time.uvIndexTime = daily.data[0].uvIndexTime;
 };
 
@@ -112,17 +114,15 @@ var interpretOzoneLevel = () => {};
 
 var displayWeatherReport = () => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
-  let hottestTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
+  let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
+  let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
+  
   console.log(`${fetchedData.location.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
-  console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at [TIME].`)
-  console.log(`It will feel the hottest at ${hottestTime}`);
+  console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
+  console.log(`It will feel the hottest at ${hottestApparentTime}`);
   console.log(`Maximum UV exposure will at ${uvHighTime}. The level will be [high to low]. Sunburns are [unlikely to likely]`);
   console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
-  // convertUnixtime(1535980140);
-  // convertUnixtime(1535982120);
-  // convertUnixtime(1466892000); //6PM (18:00) in New York, 10PM (22:00) GMT, and midnight (00:00) of the following day in Amsterdam.
-  convertUnixtime(fetchedData.time.uvIndexTime);
 };
 
 
@@ -137,8 +137,6 @@ Relationship btwn inputs and outputs:
 var convertUnixtime = (unix_timestamp) =>{
  const date = new Date(unix_timestamp * 1000);
  return date.toLocaleTimeString();
-  // console.log(date.toLocaleTimeString())
- 
 };
 
 
@@ -147,7 +145,7 @@ var convertUnixtime = (unix_timestamp) =>{
 
 // interpret air quality index (ozone)
 // interpret UV Index
-// convert unix time to people time and display
+// XXX  convert unix time to people time and display
 // let user save a default location and use a single letter command to access
 
 /*
