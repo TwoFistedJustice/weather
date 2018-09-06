@@ -54,7 +54,7 @@ axios.get(geoCodeURL)
    } else if (errorcode === 403) {
      throw new Error('Something is wrong with the API key. Make sure it is valid.');
    } else if (errorcode === 500) {
-     throw new Error('Make sure you are entering a valid location, then try again.')
+     throw new Error('Make sure you are entering a valid location. Could be a server error. Not really sure.')
    }
    recordLocationData(response.data.results[0].locations[0]);
    
