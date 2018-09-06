@@ -18,8 +18,8 @@ const argv = yargs
   .alias('help', 'h')
   .argv;
 
-var encodedAddress = encodeURIComponent(argv.address);
-var geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
+const encodedAddress = encodeURIComponent(argv.address);
+const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
 
 var fetchedData = {
   location: {
@@ -79,14 +79,12 @@ var recordLocationData = (geoResults) => {
   fetchedData.location.formatted = geoResults.formatted_address;
 };
 
-
 var recordCurrentData = (currently) => {
   fetchedData.current.temperature = Math.round(currently.temperature);
   fetchedData.current.apparentTemperature = Math.round(currently.apparentTemperature);
   fetchedData.current.uvIndex = Math.round(currently.uvIndex);
   
 };
-
 
 var recordDailyData = (daily) => {
   console.log(JSON.stringify(daily.data[0], undefined, 2));
