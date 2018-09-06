@@ -46,6 +46,7 @@ var fetchedData = {
     uvIndex: null
   },
   time: {
+    timeZone: null,
     apparentTemperatureHighTime:null,
     uvIndexTime:null
   }};
@@ -110,13 +111,34 @@ var interpretOzoneLevel = () => {};
 
 
 var displayWeatherReport = () => {
+  let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
+  let hottestTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
   console.log(`${fetchedData.location.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at [TIME].`)
-  console.log(`It will feel the hottest at [TIME]`);
-  console.log(`The UV radiation level will be [high to low]. Sunburns are [unlikely to likely]`);
+  console.log(`It will feel the hottest at ${hottestTime}`);
+  console.log(`Maximum UV exposure will at ${uvHighTime}. The level will be [high to low]. Sunburns are [unlikely to likely]`);
   console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
-  
+  // convertUnixtime(1535980140);
+  // convertUnixtime(1535982120);
+  // convertUnixtime(1466892000); //6PM (18:00) in New York, 10PM (22:00) GMT, and midnight (00:00) of the following day in Amsterdam.
+  convertUnixtime(fetchedData.time.uvIndexTime);
+};
+
+
+/*
+I: a number in the form of a unix time stamp
+O: ??
+C:
+E:
+What this fn does: It converts unix time to human readable time in the form of hh:mm, omitting seconds.
+Relationship btwn inputs and outputs:
+*/
+var convertUnixtime = (unix_timestamp) =>{
+ const date = new Date(unix_timestamp * 1000);
+ return date.toLocaleTimeString();
+  // console.log(date.toLocaleTimeString())
+ 
 };
 
 
