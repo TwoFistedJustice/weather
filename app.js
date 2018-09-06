@@ -122,7 +122,7 @@ var displayWeatherReport = () => {
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
   console.log(`It will feel the hottest at ${hottestApparentTime}`);
-  console.log(`Maximum UV exposure will ${uvRating} and will be highest at ${uvHighTime}. [WARNINGS]`);
+  console.log(`Maximum UV exposure will ${uvRating} and will be highest at ${uvHighTime}. `);
   console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
 };
 
