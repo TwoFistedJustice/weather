@@ -118,7 +118,12 @@ var displayWeatherReport = () => {
 };
 
 
+//next up:
+// https://developer.mapquest.com/documentation/geocoding-api/
 
+// calculate air quality via ozone level
+// tell user liklihood of sunburn
+// let user save a default location and use a single letter command to access
 
 
 // https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
