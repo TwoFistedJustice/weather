@@ -3,6 +3,10 @@ const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=9
 const yargs = require('yargs');
 const axios = require('axios');
 const config = require('../../config/config');
+
+const interpret = require('./interpretWeather');
+const localFile = require('./defaultLocation');
+
 const darkSkyKey = config.darkSkyKey;
 const mapQuestKey = config.mapQuestNodeWeatherKey;
 const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
@@ -119,9 +123,17 @@ var displayWeatherReport = () => {
 //next up:
 // https://developer.mapquest.com/documentation/geocoding-api/
 
-// calculate air quality via ozone level
-// tell user liklihood of sunburn
+// interpret air quality index (ozone)
+// interpret UV Index
+// convert unix time to people time and display
 // let user save a default location and use a single letter command to access
+
+/*
+ 1. write time conversion fn
+ 2. write ozone intpreting fn
+ 3. write UVI interpreting fn
+ 4+. Implement write file functionality
+* */
 
 
 // https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
