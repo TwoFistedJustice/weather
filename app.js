@@ -1,6 +1,4 @@
-const weatherURL = `https://api.darksky.net/forecast/f250587e5f444faf3f0455781977444a/34.135653,-117.8287845`;
 const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
-const testmapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=TBKmAtXk5k1zAzAQwPc1sCeuVnGiLB22&location=1301%20lombard%20street%20philadelphia`
 
 const yargs = require('yargs');
 const axios = require('axios');
