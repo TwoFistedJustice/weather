@@ -117,23 +117,23 @@ var displayWeatherReport = () => {
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
   let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
   let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
+  let aqi = interpret.ozoneLevel(fetchedData.daily.ozone);
   
   console.log(`${fetchedData.location.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
   console.log(`It will feel the hottest at ${hottestApparentTime}`);
   console.log(`Maximum UV exposure will ${uvRating} and will be highest at ${uvHighTime}. `);
-  console.log(`The air quality will be [good to bad]. It should be [easy to hard] to breathe.`)
+  console.log(`The air quality will be ${aqi}.`)
 };
 
 
 /*
 I: a number in the form of a unix time stamp
-O: ??
-C:
-E:
+O: a date time string localized
+C: none
+E: none
 What this fn does: It converts unix time to human readable time in the form of hh:mm, omitting seconds.
-Relationship btwn inputs and outputs:
 */
 var convertUnixtime = (unix_timestamp) =>{
  const date = new Date(unix_timestamp * 1000);
@@ -144,17 +144,9 @@ var convertUnixtime = (unix_timestamp) =>{
 //next up:
 // https://developer.mapquest.com/documentation/geocoding-api/
 
-// interpret air quality index (ozone)
-// interpret UV Index
-// XXX  convert unix time to people time and display
-// let user save a default location and use a single letter command to access
-
 /*
- 1. write time conversion fn
- 2. write ozone intpreting fn
- 3. write UVI interpreting fn
+ XXX 1. write time conversion fn
+ XXX 2. write ozone intpreting fn
+ XXX 3. write UVI interpreting fn
  4+. Implement write file functionality
 * */
-
-
-// https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript

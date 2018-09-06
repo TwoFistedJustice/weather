@@ -10,7 +10,23 @@ What this fn does: It returns a string which depends on where the number falls o
 Relationship btwn inputs and outputs: The output string is determined by where the number falls on the ozone health scale.
 https://airnow.gov/index.cfm?action=aqibasics.aqi
 */
-const ozoneLevel = (ozoneLevel) => {};
+const ozoneLevel = (ozoneLevel) => {
+  if (ozoneLevel < 0 || typeof ozoneLevel !== 'number') {
+    return null;
+  } else if (ozoneLevel <= 50) {
+    return 'Pretty okay';
+  } else if (ozoneLevel <= 100) {
+    return 'Meh.';
+  } else if (ozoneLevel <= 150) {
+    return 'Generally bad';
+  } else if (ozoneLevel <= 200) {
+    return 'Unhealthy';
+  } else if (ozoneLevel <= 300) {
+    return 'VERY UNHEALTHY';
+  } else if (ozoneLevel > 300) {
+    return "DOWNRIGHT DANGEROUS"
+  }
+};
 
 
 /*
