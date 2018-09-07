@@ -10,6 +10,13 @@ const localFile = require('./saveLocations');
 const darkSkyKey = config.darkSkyKey;
 const mapQuestKey = config.mapQuestNodeWeatherKey;
 const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
+
+const nameOptions = {
+  describe: 'Save a nickname for the place you want to save for quick access. Ideally it should be easy to remember and type.',
+  demand: true,
+  alias: 'n'
+};
+
 const argv = yargs
   .options({
     a: {
@@ -17,11 +24,26 @@ const argv = yargs
       demand: true,
       alias: 'address',
       string: true
-    }
+    },
+    // s: {
+    //   describe: 'Save the location with a nickname for quick reference later.',
+    //   demand: false,
+    //   alias: 'save',
+    //   string: true
+    // }
   })
+  .command('save', 'Save a place name on your local machine.', {name: nameOptions})
   .help()
   .alias('help', 'h')
   .argv;
+
+var command =argv._[0];
+console.log('************************\n', JSON.stringify(argv, undefined, 2));
+
+
+if (command === 'name') {
+  console.log('--------------------> sucess with basic setup!')
+}
 
 const encodedAddress = encodeURIComponent(argv.address);
 // const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
@@ -71,8 +93,8 @@ axios.get(geoCodeURL)
   
     recordCurrentData(response.data.currently);
     recordDailyData(response.data.daily);
-    console.log(fetchedData);
     displayWeatherReport();
+    runCommands();
   })
   .catch((err)=>{
    if(err.code === 'ENOTFOUND') {
@@ -81,6 +103,23 @@ axios.get(geoCodeURL)
      console.log(err.message);
    }
 });
+
+
+var runCommands = () =>{
+  if (command === 'save') {
+    console.log('YIPPEE')
+    let locationData = {
+      nickname: argv.name,
+      lat: fetchedData.location.lat,
+      lng: fetchedData.location.lng
+    }
+    
+    localFile.addPlace(locationData);
+  }
+  
+};
+
+
 
 var recordLocationData = (geoResults) => {
   //geoReults is response.data.results[0]
@@ -145,3 +184,5 @@ var convertUnixtime = (unix_timestamp) =>{
  XXX 3. write UVI interpreting fn
  4+. Implement write file functionality
 * */
+
+//making a change to screen shot commit diaglogue
