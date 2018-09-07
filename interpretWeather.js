@@ -28,7 +28,6 @@ const ozoneLevel = (ozoneLevel) => {
   }
 };
 
-
 /*
 I: a number
 O: a string
@@ -60,5 +59,4 @@ const uvIndexLevel = (uvi) => {
 module.exports = {
   ozoneLevel,
   uvIndexLevel
-  
 };
