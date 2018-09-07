@@ -5,7 +5,7 @@ const axios = require('axios');
 const config = require('../../config/config');
 
 const interpret = require('./interpretWeather');
-const localFile = require('./defaultLocation');
+const localFile = require('./saveLocations');
 
 const darkSkyKey = config.darkSkyKey;
 const mapQuestKey = config.mapQuestNodeWeatherKey;
@@ -93,7 +93,6 @@ var recordCurrentData = (currently) => {
   fetchedData.current.temperature = Math.round(currently.temperature);
   fetchedData.current.apparentTemperature = Math.round(currently.apparentTemperature);
   fetchedData.current.uvIndex = Math.round(currently.uvIndex);
-  
 };
 
 var recordDailyData = (daily) => {
@@ -108,10 +107,6 @@ var recordDailyData = (daily) => {
   fetchedData.time.uvIndexTime = daily.data[0].uvIndexTime;
 };
 
-var interpretUVIndex = () => {};
-var interpretOzoneLevel = () => {};
-
-
 var displayWeatherReport = () => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
@@ -123,7 +118,7 @@ var displayWeatherReport = () => {
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
   console.log(`It will feel the hottest at ${hottestApparentTime}`);
-  console.log(`Maximum UV exposure will ${uvRating} and will be highest at ${uvHighTime}. `);
+  console.log(`Maximum UV exposure will be ${uvRating} and will be highest at ${uvHighTime}. `);
   console.log(`The air quality will be ${aqi}.`)
 };
 
