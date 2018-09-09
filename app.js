@@ -86,6 +86,7 @@ var convertUnixtime = (unix_timestamp) =>{
 
 
 /* next up:
-Flesh out save location funcionality
-
+make list print each location on its own line and make it pretty
+add ability to delete a location
+add ability to so fetch weather from saved data, skipping the geo fetch entirely
 * */

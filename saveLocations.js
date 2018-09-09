@@ -1,16 +1,7 @@
 const fs = require('fs');
 const _ = require('lodash');  // in case it's needed later
 const geo = require('./geo');
-/*
-I: an object holding a place name, latitude, and longtitude
-O: a boolean indicating success or failure of operation
-C: none
-E: none
-What this fn does: It saves the location entered by user to a file on localhost
-Relationship btwn inputs and outputs: The output indicates whether the input successfully saved to a file.
-*/
 
-const listPlaces = () => {};
 /*
 I: none
 O: a location object holding a place name, latitude, and longitude
@@ -28,19 +19,17 @@ const fetchLocation = () => {
   }
 };
 
+
 /*
-supply a nickName
- -- used to reference data
- supply location name such as address or postal code
- fetch lat/long and save it
-* */
-
-// first check for duplicate name OR duplicate coordinates
-// if no dupes exist, save the place
-// if a dupe exists, tell the user whether it is name or cooridnates
-// if it's coordinates, tell user the name
-
-//addPlace will require user to use "-a" switch and get the geodata from that
+I: geoData object, a string
+O: data saved to a file
+C: none
+E: none
+What this fn does: It checks the local file for duplicate entries, finding none, it saves the new entry.
+Relationship btwn inputs and outputs: The file written is the location data with the nickname added to it.
+ Requires user to use "-a" switch and gets the geodata from that.
+ Fn is called from geoData fetch in app.js
+*/
 const addPlace = (location, nickname) => {
   let places = fetchLocation();
   let duplicates = [];
@@ -57,17 +46,6 @@ const addPlace = (location, nickname) => {
   } else {
     console.log("Duplicate location already saved.", duplicates[0]);
   }
-  
-  
-  // make dupes array
-  // filter places arrayfor duplicates (nickname or coords)
-  // if there are duplicates
-    // tell the user what is duplicated
-  // if not, then add the new location to the places array
-  // write the places array to file
-  
-  
-  
 };
 
 const deleteLocation = () => {};
@@ -75,9 +53,6 @@ const deleteLocation = () => {};
 module.exports = {
   addPlace,
   deleteLocation,
-  listPlaces,
   fetchLocation
 };
 
-
-//this is a cco
