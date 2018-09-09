@@ -42,29 +42,32 @@ supply a nickName
 
 //addPlace will require user to use "-a" switch and get the geodata from that
 const addPlace = (location, nickname) => {
-  console.log('called', location, nickname)
+  let places = fetchLocation();
+  let duplicates = [];
   
-  let places = null;
+  var duplicateTest = (item) => {
+    return (item.nickname === nickname || (item.lat === location.lat && item.lng === location.lng))
+  };
   
-  try {
-    places = JSON.parse(fs.readFileSync('./places.json'));
-    console.log('places', places);
+  duplicates = places.filter(duplicateTest)
+  if (duplicates.length === 0) {
+    location.nickname = nickname;
+    places.push(location);
+    fs.writeFileSync('./places.json', JSON.stringify(places, undefined, 2));
+  } else {
+    console.log("Duplicate location already saved.", duplicates[0]);
   }
-  catch(error) {
-    console.log('addPlace() error: ', error)
-  }
   
   
-  // fetch places and store in an array
-  // check for duplicates
-    // check name
-   // check coordinates
-   // inform user if either or both are dupes
-  // if neither are dupes
-    // push the arg onto the array and pass it to saveLocation
+  // make dupes array
+  // filter places arrayfor duplicates (nickname or coords)
+  // if there are duplicates
+    // tell the user what is duplicated
+  // if not, then add the new location to the places array
+  // write the places array to file
   
-  // will need to change param name here
-  // saveLocation(locationData);
+  
+  
 };
 
 const deleteLocation = () => {};
