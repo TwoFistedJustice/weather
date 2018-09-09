@@ -3,6 +3,7 @@ const config = require('../../config/config');
 const darkSkyKey = config.darkSkyKey;
 
 var weatherData = {
+  name: null,
   current: {
     temperature: null,
     apparentTemperature: null,
@@ -22,11 +23,9 @@ var weatherData = {
     uvIndexTime:null
   }};
 
-
-
-var fetchWeather = (lat, lng) => {
-  var weatherURL = `https://api.darksky.net/forecast/${darkSkyKey}/${lat},${lng}`;
-  
+var fetchWeather = (geoData) => {
+  var weatherURL = `https://api.darksky.net/forecast/${darkSkyKey}/${geoData.lat},${geoData.lng}`;
+   weatherData.name = geoData.name;
   return axios.get(weatherURL)
     .then((response)=>{
       

@@ -9,7 +9,6 @@ const weather = require('./weather');
 const interpret = require('./interpretWeather');
 const places = require('./saveLocations');
 
-
 const nameOptions = {
   describe: 'Save a nickname for the place you want to save for quick access. Ideally it should be easy to remember and type.',
   demand: true,
@@ -35,7 +34,6 @@ const argv = yargs
 var command =argv._[0];
 console.log('************************\n', JSON.stringify(argv, undefined, 2));
 
-
 if (command === 'name') {
   console.log('--------------------> sucess with basic setup!')
 } else if (command === 'list') {
@@ -44,15 +42,14 @@ if (command === 'name') {
 
 const encodedAddress = encodeURIComponent(argv.address);
 
-
 if ( argv.a !== undefined) {
   
   geo.fetchGeoData(encodedAddress)
     .then((response)=>{
       console.log(JSON.stringify(response,undefined, 2));
-      return weather.fetchWeather(response.lat, response.lng);
+      return weather.fetchWeather(response);
     }).then((weatherData) => {
-       console.log(weatherData, undefined, 2)
+       // console.log(weatherData, undefined, 2)
      displayWeatherReport(weatherData);
   })
     .catch((err)=>{
@@ -64,18 +61,12 @@ if ( argv.a !== undefined) {
     });
 }
 
-
-
   if (command === 'save') {
     console.log('YIPPEE')
     
     places.addPlace(locationData);
   }
   
-
-
-
-
 var displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
@@ -83,14 +74,13 @@ var displayWeatherReport = ( fetchedData) => {
   let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
   let aqi = interpret.ozoneLevel(fetchedData.daily.ozone);
   
-  console.log(`${fetchedData.location.name}:`);
+  console.log(`${fetchedData.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
   console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
   console.log(`It will feel the hottest at ${hottestApparentTime}`);
   console.log(`Maximum UV exposure will be ${uvRating} and will be highest at ${uvHighTime}. `);
   console.log(`The air quality will be ${aqi}.`)
 };
-
 
 /*
 I: a number in the form of a unix time stamp
