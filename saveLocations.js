@@ -20,7 +20,15 @@ E: none
 What this fn does: It reads location data from a file on the localhost and returns an object.
 Relationship btwn inputs and outputs: There are no inputs.
 */
-const fetchLocation = () => {};
+const fetchLocation = () => {
+  try {
+    return JSON.parse(fs.readFileSync('places.json'));
+  }
+  catch(error){
+    return [];
+  }
+};
+
 /*
 supply a nickName
  -- used to reference data

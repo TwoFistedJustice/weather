@@ -4,35 +4,32 @@ const yargs = require('yargs');
 const axios = require('axios');
 const config = require('../../config/config');
 
+const geo = require('./geo');
 const interpret = require('./interpretWeather');
-const localFile = require('./saveLocations');
+const places = require('./saveLocations');
 
 const darkSkyKey = config.darkSkyKey;
-const mapQuestKey = config.mapQuestNodeWeatherKey;
-const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
+// const mapQuestKey = config.mapQuestNodeWeatherKey;
+// const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
 
 const nameOptions = {
   describe: 'Save a nickname for the place you want to save for quick access. Ideally it should be easy to remember and type.',
   demand: true,
-  alias: 'n'
+  alias: 's'
 };
 
 const argv = yargs
   .options({
     a: {
       describe: 'Get weather for a given location. Use double quotes in Windows.',
-      demand: true,
+      demand: false,
       alias: 'address',
       string: true
     },
-    // s: {
-    //   describe: 'Save the location with a nickname for quick reference later.',
-    //   demand: false,
-    //   alias: 'save',
-    //   string: true
-    // }
   })
   .command('save', 'Save a place name on your local machine.', {name: nameOptions})
+  .command('list', 'Display all saved places and their coordinates')
+  .command('weather', 'Display the weather for the location you enter.')
   .help()
   .alias('help', 'h')
   .argv;
@@ -43,108 +40,34 @@ console.log('************************\n', JSON.stringify(argv, undefined, 2));
 
 if (command === 'name') {
   console.log('--------------------> sucess with basic setup!')
+} else if (command === 'list') {
+  console.log(places.fetchLocation());
 }
 
 const encodedAddress = encodeURIComponent(argv.address);
 // const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
 const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
 
-var fetchedData = {
-  location: {
-    name: null,
-    lat: 34.135653,
-    lng: -117.8287845
-  },
-  current: {
-    temperature: null,
-    apparentTemperature: null,
-    uvIndex: null
-  },
-  daily: {
-    summaryWeekly: null,
-    temperatureHigh: null,
-    apparentTemperatureHigh:null,
-    ozone: null,
-    uvIndex: null
-  },
-  time: {
-    timeZone: null,
-    apparentTemperatureHighTime:null,
-    temperatureHighTime: null,
-    uvIndexTime:null
-  }};
 
-axios.get(geoCodeURL)
- .then((response) => {
-   let errorcode = response.data.info.statuscode;
-   if ( errorcode === 400) {
-     throw new Error('Input error. You probably typed something wrong. Make sure you are passing a valid URL.');
-   } else if (errorcode === 403) {
-     throw new Error('Something is wrong with the API key. Make sure it is valid.');
-   } else if (errorcode === 500) {
-     throw new Error('Make sure you are entering a valid location. Could be a server error. Not really sure.')
-   }
-   recordLocationData(response.data.results[0].locations[0]);
-   
-   var weatherData = `https://api.darksky.net/forecast/${darkSkyKey}/${fetchedData.location.lat},${fetchedData.location.lng}`;
-   return axios.get(weatherData);
- })
-  .then((response)=>{
+if ( argv.a !== undefined) {
+  // call the server and get weather
+  // move the fn to another file
+  // can I move fetchedData and fns over?
+  geo.fetchGeoData();
   
-    recordCurrentData(response.data.currently);
-    recordDailyData(response.data.daily);
-    displayWeatherReport();
-    runCommands();
-  })
-  .catch((err)=>{
-   if(err.code === 'ENOTFOUND') {
-     console.log("Unable to connect to server. Why won't the other computers talk to me???");
-   } else {
-     console.log(err.message);
-   }
-});
+}
 
 
-var runCommands = () =>{
+
   if (command === 'save') {
     console.log('YIPPEE')
-    let locationData = {
-      nickname: argv.name,
-      lat: fetchedData.location.lat,
-      lng: fetchedData.location.lng
-    }
     
-    localFile.addPlace(locationData);
+    places.addPlace(locationData);
   }
   
-};
 
 
 
-var recordLocationData = (geoResults) => {
-  //geoReults is response.data.results[0]
-  fetchedData.location.name = geoResults.adminArea5;
-  fetchedData.location.lat = geoResults.latLng.lat;
-  fetchedData.location.lng = geoResults.latLng.lng;
-};
-
-var recordCurrentData = (currently) => {
-  fetchedData.current.temperature = Math.round(currently.temperature);
-  fetchedData.current.apparentTemperature = Math.round(currently.apparentTemperature);
-  fetchedData.current.uvIndex = Math.round(currently.uvIndex);
-};
-
-var recordDailyData = (daily) => {
-  // console.log(JSON.stringify(daily.data[0], undefined, 2));
-  fetchedData.daily.summaryWeekly = daily.summary;
-  fetchedData.daily.temperatureHigh = Math.round(daily.data[0].temperatureHigh);
-  fetchedData.daily.apparentTemperatureHigh = Math.round(daily.data[0].apparentTemperatureHigh);
-  fetchedData.daily.ozone = Math.round(daily.data[0].ozone);
-  fetchedData.daily.uvIndex = Math.round(daily.data[0].uvIndex);
-  fetchedData.time.apparentTemperatureHighTime = daily.data[0].apparentTemperatureHighTime;
-  fetchedData.time.temperatureHighTime = daily.data[0].temperatureHighTime;
-  fetchedData.time.uvIndexTime = daily.data[0].uvIndexTime;
-};
 
 var displayWeatherReport = () => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
