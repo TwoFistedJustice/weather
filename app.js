@@ -30,21 +30,23 @@ const argv = yargs
   .argv;
 
 var command =argv._[0];
-console.log('************************\n', JSON.stringify(argv, undefined, 2));
+
+// console.log('app.js 33  *****************\n', JSON.stringify(argv, undefined, 2));
 
 if (command === 'name') {
   console.log('--------------------> sucess with basic setup!')
 } else if (command === 'list') {
-  console.log(places.fetchLocation());
+  console.log('app.js 38',places.fetchLocation());
 }
 
-const encodedAddress = encodeURIComponent(argv.address);
+// const encodedAddress = encodeURIComponent(argv.address);
 
 if ( argv.a !== undefined) {
   
-  geo.fetchGeoData(encodedAddress)
+  geo.fetchGeoData(argv.address)
     .then((response)=>{
-      console.log(JSON.stringify(response,undefined, 2));
+      // console.log('app.js 47', JSON.stringify(response,undefined, 2));
+      
       return weather.fetchWeather(response);
     }).then((weatherData) => {
      displayWeatherReport(weatherData);
@@ -59,8 +61,7 @@ if ( argv.a !== undefined) {
 }
 
   if (command === 'save') {
-    console.log('YIPPEE')
-    places.addPlace(locationData);
+    places.addPlace(argv.a, argv.name);
   }
   
 var displayWeatherReport = ( fetchedData) => {

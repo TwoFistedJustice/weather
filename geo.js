@@ -9,7 +9,8 @@ var geoData = {
     lng: null //-117.8287845
   };
 
-var fetchGeoData = (encodedAddress) => {
+var fetchGeoData = (address) => {
+  const encodedAddress = encodeURIComponent(address);
    const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
   
    return axios.get(geoCodeURL)
@@ -35,6 +36,11 @@ var fetchGeoData = (encodedAddress) => {
     });
 };
 
+
+var getGeoData = () => {
+  return geoData;
+};
+
 var setLocationData = (geoResults) => {
   //geoReults is response.data.results[0]
   geoData.name = geoResults.adminArea5;
@@ -43,5 +49,6 @@ var setLocationData = (geoResults) => {
 };
 
 module.exports = {
-  fetchGeoData
+  fetchGeoData,
+  getGeoData
 };
