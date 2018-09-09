@@ -5,12 +5,10 @@ const axios = require('axios');
 const config = require('../../config/config');
 
 const geo = require('./geo');
+const weather = require('./weather');
 const interpret = require('./interpretWeather');
 const places = require('./saveLocations');
 
-const darkSkyKey = config.darkSkyKey;
-// const mapQuestKey = config.mapQuestNodeWeatherKey;
-// const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
 
 const nameOptions = {
   describe: 'Save a nickname for the place you want to save for quick access. Ideally it should be easy to remember and type.',
@@ -45,16 +43,25 @@ if (command === 'name') {
 }
 
 const encodedAddress = encodeURIComponent(argv.address);
-// const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
-const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
 
 
 if ( argv.a !== undefined) {
-  // call the server and get weather
-  // move the fn to another file
-  // can I move fetchedData and fns over?
-  geo.fetchGeoData();
   
+  geo.fetchGeoData(encodedAddress)
+    .then((response)=>{
+      console.log(JSON.stringify(response,undefined, 2));
+      return weather.fetchWeather(response.lat, response.lng);
+    }).then((weatherData) => {
+       console.log(weatherData, undefined, 2)
+     displayWeatherReport(weatherData);
+  })
+    .catch((err)=>{
+      if(err.code === 'ENOTFOUND') {
+        console.log("Unable to connect to MapQuest server.");
+      } else {
+        console.log(err.message);
+      }
+    });
 }
 
 
@@ -69,7 +76,7 @@ if ( argv.a !== undefined) {
 
 
 
-var displayWeatherReport = () => {
+var displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
   let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);

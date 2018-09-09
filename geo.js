@@ -6,16 +6,17 @@ const mapQuestKey = config.mapQuestNodeWeatherKey;
 
 
 
-var geoData = () => {
+var geoData = {
     name: null,
     lat: null, //34.135653,
     lng: null //-117.8287845
   };
 
 
-var fetchGeoData = () => {
-  const mapquestGeoURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}`;
-  axios.get(geoCodeURL)
+var fetchGeoData = (encodedAddress) => {
+   const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
+  
+   return axios.get(geoCodeURL)
     .then((response) => {
       let errorcode = response.data.info.statuscode;
       if ( errorcode === 400) {
@@ -25,23 +26,21 @@ var fetchGeoData = () => {
       } else if (errorcode === 500) {
         throw new Error('Make sure you are entering a valid location. Could be a server error. Not really sure.')
       }
-      recordLocationData(response.data.results[0].locations[0]);
-      console.log('geo.js', JSON.stringify(geoData,undefined, 2));
+      
+      setLocationData(response.data.results[0].locations[0]);
+      return geoData;
     })
     .catch((err)=>{
       if(err.code === 'ENOTFOUND') {
-        console.log("Unable to connect to server. Why won't the other computers talk to me???");
+        console.log("Unable to connect to MapQuest server.");
       } else {
         console.log(err.message);
       }
     });
-  
-  
-  
 };
 
 
-var recordLocationData = (geoResults) => {
+var setLocationData = (geoResults) => {
   //geoReults is response.data.results[0]
   geoData.name = geoResults.adminArea5;
   geoData.lat = geoResults.latLng.lat;
