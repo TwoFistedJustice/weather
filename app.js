@@ -1,7 +1,7 @@
 // const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
 const yargs = require('yargs');
-const axios = require('axios');
-const config = require('../../config/config');
+// const axios = require('axios');
+// const config = require('../../config/config');
 const geo = require('./geo');
 const weather = require('./weather');
 const interpret = require('./interpretWeather');
@@ -31,21 +31,17 @@ const argv = yargs
 
 var command =argv._[0];
 
-// console.log('app.js 33  *****************\n', JSON.stringify(argv, undefined, 2));
-
-if (command === 'name') {
-  console.log('--------------------> sucess with basic setup!')
-} else if (command === 'list') {
+  if (command === 'list') {
   console.log('app.js 38',places.fetchLocation());
 }
-
-// const encodedAddress = encodeURIComponent(argv.address);
 
 if ( argv.a !== undefined) {
   
   geo.fetchGeoData(argv.address)
     .then((response)=>{
-      // console.log('app.js 47', JSON.stringify(response,undefined, 2));
+      if (command === 'save') {
+        places.addPlace(response, argv.name);
+      }
       
       return weather.fetchWeather(response);
     }).then((weatherData) => {
@@ -60,10 +56,7 @@ if ( argv.a !== undefined) {
     });
 }
 
-  if (command === 'save') {
-    places.addPlace(argv.a, argv.name);
-  }
-  
+
 var displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
