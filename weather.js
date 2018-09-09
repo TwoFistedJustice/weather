@@ -1,5 +1,6 @@
 const axios = require('axios');
 const config = require('../../config/config');
+const darkSkyKey = config.darkSkyKey;
 
 var weatherData = {
   current: {
@@ -23,28 +24,23 @@ var weatherData = {
 
 
 
-
-
 var fetchWeather = (lat, lng) => {
   var weatherURL = `https://api.darksky.net/forecast/${darkSkyKey}/${lat},${lng}`;
   
-  axios.get(weatherURL)
+  return axios.get(weatherURL)
     .then((response)=>{
       
       recordCurrentData(response.data.currently);
       recordDailyData(response.data.daily);
-      displayWeatherReport();
-      runCommands();
+      return weatherData;
     })
     .catch((err)=>{
       if(err.code === 'ENOTFOUND') {
-        console.log("Unable to connect to server. Why won't the other computers talk to me???");
+        console.log("Unable to connect to Dark Sky server.");
       } else {
         console.log(err.message);
       }
     });
-  
-  
 };
 
 var recordCurrentData = (currently) => {
@@ -63,4 +59,9 @@ var recordDailyData = (daily) => {
   weatherData.time.apparentTemperatureHighTime = daily.data[0].apparentTemperatureHighTime;
   weatherData.time.temperatureHighTime = daily.data[0].temperatureHighTime;
   weatherData.time.uvIndexTime = daily.data[0].uvIndexTime;
+};
+
+
+module.exports = {
+  fetchWeather
 };
