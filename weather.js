@@ -28,7 +28,6 @@ var fetchWeather = (geoData) => {
    weatherData.name = geoData.name;
   return axios.get(weatherURL)
     .then((response)=>{
-      
       recordCurrentData(response.data.currently);
       recordDailyData(response.data.daily);
       return weatherData;

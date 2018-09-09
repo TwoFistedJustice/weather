@@ -55,7 +55,6 @@ const uvIndexLevel = (uvi) => {
   }
 };
 
-
 module.exports = {
   ozoneLevel,
   uvIndexLevel

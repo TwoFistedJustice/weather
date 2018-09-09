@@ -1,9 +1,7 @@
-const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
-
+// const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
 const yargs = require('yargs');
 const axios = require('axios');
 const config = require('../../config/config');
-
 const geo = require('./geo');
 const weather = require('./weather');
 const interpret = require('./interpretWeather');
@@ -49,7 +47,6 @@ if ( argv.a !== undefined) {
       console.log(JSON.stringify(response,undefined, 2));
       return weather.fetchWeather(response);
     }).then((weatherData) => {
-       // console.log(weatherData, undefined, 2)
      displayWeatherReport(weatherData);
   })
     .catch((err)=>{
@@ -63,7 +60,6 @@ if ( argv.a !== undefined) {
 
   if (command === 'save') {
     console.log('YIPPEE')
-    
     places.addPlace(locationData);
   }
   
@@ -95,14 +91,7 @@ var convertUnixtime = (unix_timestamp) =>{
 };
 
 
-//next up:
-// https://developer.mapquest.com/documentation/geocoding-api/
+/* next up:
+Flesh out save location funcionality
 
-/*
- XXX 1. write time conversion fn
- XXX 2. write ozone intpreting fn
- XXX 3. write UVI interpreting fn
- 4+. Implement write file functionality
 * */
-
-//making a change to screen shot commit diaglogue

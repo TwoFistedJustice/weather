@@ -1,17 +1,13 @@
 const gooleGeoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=91740`
 const axios = require('axios');
 const config = require('../../config/config');
-
 const mapQuestKey = config.mapQuestNodeWeatherKey;
-
-
 
 var geoData = {
     name: null,
     lat: null, //34.135653,
     lng: null //-117.8287845
   };
-
 
 var fetchGeoData = (encodedAddress) => {
    const geoCodeURL = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapQuestKey}&location=${encodedAddress}`;
@@ -39,15 +35,12 @@ var fetchGeoData = (encodedAddress) => {
     });
 };
 
-
 var setLocationData = (geoResults) => {
   //geoReults is response.data.results[0]
   geoData.name = geoResults.adminArea5;
   geoData.lat = geoResults.latLng.lat;
   geoData.lng = geoResults.latLng.lng;
 };
-
-
 
 module.exports = {
   fetchGeoData
