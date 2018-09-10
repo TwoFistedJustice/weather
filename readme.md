@@ -1,6 +1,6 @@
 **Dependencies you need to install:**
 
-Use whatever the latest version is. Nothing in here is so complex that it will break with a new release.
+Use whatever the latest version is. Nothing here is so complex that it should break with a new release.
 * Node
 * Yargs
 * Lodash
@@ -8,19 +8,20 @@ Use whatever the latest version is. Nothing in here is so complex that it will b
 
 **API Keys:**  
 You will need
-* MapQuest API key.
-* DarkSky API key.
+* Air Visual API key (air quality)
+* DarkSky API key. (weather)
+* MapQuest API key. (geo location)
   
-You will need to store them it in a file called "config.js" in
+Store them it in a file called "config.js" in
 a folder (also) called config, two directory levels back from
 where you keep the app.
 
 Or if you are only going to run the app on your local machine
-you can just change the value of the variables "darkSkyKey"
-and "mapQuestKey" to the string value of the respective keys.
+you can just change the value of the variables `darkSkyKey`, `mapQuestKey`,
+ and `airVisualKey` to the string value of the respective keys.
 
 **INSTALLING THE APP**  
-Extract the zip file to a location of your preference. Open the location in terminal.
+Extract the zip file to a location of your choice. Open the location in terminal.
 Install the dependencies using `npm` and the `--save` switch. 
 
 **USING THE APP**
@@ -65,15 +66,16 @@ Whatever you set to home, gets fetched when you pass no paramaters.
 
 **SUMMARY**
 
-Commands you begin with `-`
+Commands you begin with a hypen `-`
 * `-a` : gets weather for a given address or postal code. 
 Note: different countries may use the same postal code.  
 
 Example: `node app.js -a 60176` 
 fetches weather for Schiller Park, Chicaogo USA
-When using a postal code you may omit quotation marks.
 
-When using an address you must use quotation marks.  
+When typing a postal code with no spaces you may omit quotation marks.
+
+When typing anything that has spaces you must use quotation marks.  
 
 Example: `node app.js -a ""870 Valencia St, San Francisco, CA 94110"`  
 Fetches the weather for Borderlands Cafe in San Francisco. 
@@ -81,7 +83,21 @@ Note: it does not get the weather INSIDE the cafe. The weather
 inside the cafe is just WEIRD. 
 
 
-* `-g` : gets weahter for a saved location
+* `-g` : gets weather for a saved location
+
+Example: You prevsiously saved your home address with the nickname "home". Note,
+the command is also called "home". So you would type `node app.js -g home`.
+If you had a location nicknamed "bff" you would type `node app.js -g bff`.
+
+
+Let's say you wanted to save the location of your favorite cafe. You would type
+`node app.js -a "1110 Garden St, San Luis Obispo, CA 93401" --name linnaeas save`
+
+
+
+In general you follow the above pattern for every command in the app.
+`-a` or `-g` followed by an address or postal code. The only exception is the `list` command
+which can be used without any other parameters.
 
 
 
