@@ -60,8 +60,7 @@ type `-g [word you used as the nickname. Use double quotes around nickname in Wi
 Note: you must save a location _before_ setting it as your default.
 Requires the `--name` switch.
 Type `--name [the nickname of the location] home`
-Set a default location. Whatever you set to home, gets fetched when you pass
-no paramaters.
+Whatever you set to home, gets fetched when you pass no paramaters.
 
 
 **SUMMARY**
@@ -69,11 +68,13 @@ no paramaters.
 Commands you begin with `-`
 * `-a` : gets weather for a given address or postal code. 
 Note: different countries may use the same postal code.  
+
 Example: `node app.js -a 60176` 
 fetches weather for Schiller Park, Chicaogo USA
 When using a postal code you may omit quotation marks.
 
-When using an address you must use quotation marks.
+When using an address you must use quotation marks.  
+
 Example: `node app.js -a ""870 Valencia St, San Francisco, CA 94110"`  
 Fetches the weather for Borderlands Cafe in San Francisco. 
 Note: it does not get the weather INSIDE the cafe. The weather
