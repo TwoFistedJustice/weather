@@ -40,12 +40,12 @@ var command =argv._[0];
 // console.log('line 40', argv)
 
 const getWeather = (geoData) => {
-  weather.fetchWeather(geoData)
-    .then((weatherData) =>{
-      displayWeatherReport(weatherData);
+  return  weather.fetchWeather(geoData)
+      .then((weatherData) =>{
+        displayWeatherReport(weatherData);
     }).catch((err)=>{
-    console.log(err.message);
-  });
+      console.log(err.message);
+    });
 };
 
 
@@ -83,13 +83,12 @@ if (argv.a !== undefined) {
   getWeather(geoData);
 }
 
-
 const displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
   let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
   let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
-  let aqi = interpret.ozoneLevel(fetchedData.daily.ozone);
+  let aqi = interpret.ozoneLevel(fetchedData.daily.aqiUS);
   
   console.log(`${fetchedData.name}:`);
   console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
@@ -115,18 +114,22 @@ const convertUnixtime = (unix_timestamp) =>{
 /* next up:
 
    * High Priority*
-DONE   * add ability to delete a location
+Integrate Air Visual air pollutin APIDONE   * add ability to delete a location
 DONE * add ability to so fetch weather from saved data, skipping the geo fetch entirely
 DONE add ability to make one location default so if no args passed in, it just gets weather for default
 
     *Low Priority*
 make list print each location on its own line and make it pretty
-DONE Refactor so weather.fetchWeather().then calls are not repeated
-  -- pull them into a single chained function then call that function.
 Make sure saving a location allows duplicate names, but NOT duplicate nicknames
 
-AQI is always Very Unhealthy - see if it's a bug
+DONE Refactor so weather.fetchWeather().then calls are not repeated
+  -- pull them into a single chained function then call that function.
+
+
+AQI is always Very Unhealthy - see if it's a bug\
+ -- Nope, Dark Sky just has a lousy air quality property.
 
 Build Readme.md
+//https://docs.airnowapi.org/
 
 * */
