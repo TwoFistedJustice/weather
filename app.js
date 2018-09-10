@@ -37,7 +37,17 @@ const argv = yargs
   .argv;
 
 var command =argv._[0];
-console.log('line 34', argv)
+// console.log('line 40', argv)
+
+const getWeather = (geoData) => {
+  weather.fetchWeather(geoData)
+    .then((weatherData) =>{
+      displayWeatherReport(weatherData);
+    }).catch((err)=>{
+    console.log(err.message);
+  });
+};
+
 
   if (command === 'list') {
   console.log('app.js 38',places.fetchLocations());
@@ -54,11 +64,8 @@ if (argv.a !== undefined) {
       if (command === 'save') {
         places.addPlace(response, argv.name);
       }
-      
-      return weather.fetchWeather(response);
-    }).then((weatherData) => {
-     displayWeatherReport(weatherData);
-  })
+      getWeather(response);
+    })
     .catch((err)=>{
       if(err.code === 'ENOTFOUND') {
         console.log("Unable to connect to MapQuest server.");
@@ -68,20 +75,16 @@ if (argv.a !== undefined) {
     });
 } else if (argv.g !== undefined) {
   let geoData = places.fetchOneLocation(argv.get);
+  getWeather(geoData);
   
-  weather.fetchWeather(geoData)
-    .then((weatherData) =>{
-      displayWeatherReport(weatherData);
-    }).catch((err)=>{
-      console.log('saved location error:', err);
-  });
 } else if (argv.a === undefined && argv.g === undefined && argv._.length === 0) {
-  console.log("Fetching default weather for default location");
-  console.log('need to implement weather fetch: ', places.getDefaultLocation())
-  
+  console.log("Fetching weather for default location");
+  let geoData = places.getDefaultLocation();
+  getWeather(geoData);
 }
 
-var displayWeatherReport = ( fetchedData) => {
+
+const displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
   let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
   let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
@@ -103,7 +106,7 @@ C: none
 E: none
 What this fn does: It converts unix time to human readable time in the form of hh:mm, omitting seconds.
 */
-var convertUnixtime = (unix_timestamp) =>{
+const convertUnixtime = (unix_timestamp) =>{
  const date = new Date(unix_timestamp * 1000);
  return date.toLocaleTimeString();
 };
@@ -114,14 +117,16 @@ var convertUnixtime = (unix_timestamp) =>{
    * High Priority*
 DONE   * add ability to delete a location
 DONE * add ability to so fetch weather from saved data, skipping the geo fetch entirely
-* add ability to make one location default so if no args passed in, it just gets weather for default
+DONE add ability to make one location default so if no args passed in, it just gets weather for default
 
     *Low Priority*
 make list print each location on its own line and make it pretty
-Refactor so weather.fetchWeather().then calls are not repeated
+DONE Refactor so weather.fetchWeather().then calls are not repeated
   -- pull them into a single chained function then call that function.
 Make sure saving a location allows duplicate names, but NOT duplicate nicknames
 
 AQI is always Very Unhealthy - see if it's a bug
+
+Build Readme.md
 
 * */
