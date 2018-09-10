@@ -64,6 +64,7 @@ const addPlace = (location, nickname) => {
   duplicates = places.filter(duplicateTest)
   if (duplicates.length === 0) {
     location.nickname = nickname;
+    location.default = false;
     places.push(location);
     fs.writeFileSync('./places.json', JSON.stringify(places, undefined, 2));
   } else {
@@ -89,10 +90,56 @@ const deleteLocation = (placeName) => {
   fs.writeFileSync('./places.json', JSON.stringify(filteredPlaces, undefined, 2));
 };
 
+/*
+I: a string (the nickname of the saved location you wish to set as default)
+O: none
+C:
+E: input must be a nickName saved in places.json
+What this fn does: It sets one saved location to default: true, and the rest to false
+Relationship btwn inputs and outputs: no outputs
+*/
+const setDefaultLocation = (nickname) => {
+  let places = fetchLocations();
+  
+  for (let i = 0; i < places.length; i++) {
+    let item = places[i];
+    if (item.nickname === nickname ) {
+      item.default = true;
+    } else {
+      item.default = false;
+    }
+  }
+  
+  // let setDefault = (item) => {
+  //   if (item.nickname !== placeName && item.default !== false) {
+  //     item.default = false;
+  //   } else if (item.nickname === placeName) {
+  //     item.default = true;
+  //   }
+  //   return item;
+  // };
+  // places = places.map(setDefault(item));
+  fs.writeFileSync('./places.json', JSON.stringify(places, undefined, 2));
+};
+
+
+const getDefaultLocation = () => {
+  let places = fetchLocations();
+  let test = (item) => {
+    return item.default === true;
+  };
+  
+  return places.filter(test)[0];
+  
+};
+
 module.exports = {
   addPlace,
   deleteLocation,
   fetchLocations,
-  fetchOneLocation
+  fetchOneLocation,
+  getDefaultLocation,
+  setDefaultLocation
+  
 };
 

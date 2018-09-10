@@ -31,7 +31,7 @@ const argv = yargs
   .command('save', 'Save a place name on your local machine.', {name: nameOptions})
   .command('list', 'Display all saved places and their coordinates')
   .command('delete', 'Enter a nickname to delete a saved location')
-  .command('weather', 'Display the weather for the location you enter.')
+  .command('home', 'Set a /"home/" location. Enter no parameters to get weather for home location')
   .help()
   .alias('help', 'h')
   .argv;
@@ -43,6 +43,8 @@ console.log('line 34', argv)
   console.log('app.js 38',places.fetchLocations());
 } else if (command === 'delete') {
     places.deleteLocation(argv.name)
+  } else if (command === 'home') {
+    places.setDefaultLocation(argv.name);
   }
 
 if (argv.a !== undefined) {
@@ -73,6 +75,10 @@ if (argv.a !== undefined) {
     }).catch((err)=>{
       console.log('saved location error:', err);
   });
+} else if (argv.a === undefined && argv.g === undefined && argv._.length === 0) {
+  console.log("Fetching default weather for default location");
+  console.log('need to implement weather fetch: ', places.getDefaultLocation())
+  
 }
 
 var displayWeatherReport = ( fetchedData) => {
@@ -112,5 +118,10 @@ DONE * add ability to so fetch weather from saved data, skipping the geo fetch e
 
     *Low Priority*
 make list print each location on its own line and make it pretty
+Refactor so weather.fetchWeather().then calls are not repeated
+  -- pull them into a single chained function then call that function.
+Make sure saving a location allows duplicate names, but NOT duplicate nicknames
+
+AQI is always Very Unhealthy - see if it's a bug
 
 * */
