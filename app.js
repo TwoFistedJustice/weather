@@ -48,9 +48,50 @@ const getWeather = (geoData) => {
     });
 };
 
+const displayList = (list) => {
+  for (let i = 0; i < list.length; i++) {
+    let item = list[i];
+    if (item.default === true) {
+      console.log(`------>  Nickname: ${item.nickname}, City: ${item.name} <------ DEFAULT`);
+    } else {
+      console.log(`Nickname: ${item.nickname}, City: ${item.name}`);
+    }
+    
+  }
+};
 
-  if (command === 'list') {
-  console.log('app.js 38',places.fetchLocations());
+const displayWeatherReport = ( fetchedData) => {
+  let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
+  let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
+  let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
+  let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
+  let aqi = interpret.ozoneLevel(fetchedData.daily.aqiUS);
+  
+  console.log(`${fetchedData.name}:`);
+  console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
+  console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
+  console.log(`It will feel the hottest at ${hottestApparentTime}`);
+  console.log(`Maximum UV exposure will be ${uvRating} and will be highest at ${uvHighTime}. `);
+  console.log(`The air quality will be ${aqi}.`)
+};
+
+/*
+I: a number in the form of a unix time stamp
+O: a date time string localized
+C: none
+E: none
+What this fn does: It converts unix time to human readable time in the form of hh:mm, omitting seconds.
+*/
+const convertUnixtime = (unix_timestamp) =>{
+  const date = new Date(unix_timestamp * 1000);
+  return date.toLocaleTimeString();
+};
+
+
+
+if (command === 'list') {
+    let list = places.listLccations();
+    displayList(list);
 } else if (command === 'delete') {
     places.deleteLocation(argv.name)
   } else if (command === 'home') {
@@ -83,53 +124,13 @@ if (argv.a !== undefined) {
   getWeather(geoData);
 }
 
-const displayWeatherReport = ( fetchedData) => {
-  let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
-  let hottestTime = convertUnixtime(fetchedData.time.temperatureHighTime);
-  let hottestApparentTime = convertUnixtime(fetchedData.time.apparentTemperatureHighTime);
-  let uvRating = interpret.uvIndexLevel(fetchedData.daily.uvIndex);
-  let aqi = interpret.ozoneLevel(fetchedData.daily.aqiUS);
-  
-  console.log(`${fetchedData.name}:`);
-  console.log(`It is ${fetchedData.current.temperature} degrees, but feels like ${fetchedData.current.apparentTemperature} degrees.`);
-  console.log(`It will reach ${fetchedData.daily.temperatureHigh} degrees at ${hottestTime}.`)
-  console.log(`It will feel the hottest at ${hottestApparentTime}`);
-  console.log(`Maximum UV exposure will be ${uvRating} and will be highest at ${uvHighTime}. `);
-  console.log(`The air quality will be ${aqi}.`)
-};
 
-/*
-I: a number in the form of a unix time stamp
-O: a date time string localized
-C: none
-E: none
-What this fn does: It converts unix time to human readable time in the form of hh:mm, omitting seconds.
-*/
-const convertUnixtime = (unix_timestamp) =>{
- const date = new Date(unix_timestamp * 1000);
- return date.toLocaleTimeString();
-};
+
+
 
 
 /* next up:
-
-   * High Priority*
-Integrate Air Visual air pollutin APIDONE   * add ability to delete a location
-DONE * add ability to so fetch weather from saved data, skipping the geo fetch entirely
-DONE add ability to make one location default so if no args passed in, it just gets weather for default
-
     *Low Priority*
 make list print each location on its own line and make it pretty
-Make sure saving a location allows duplicate names, but NOT duplicate nicknames
-
-DONE Refactor so weather.fetchWeather().then calls are not repeated
-  -- pull them into a single chained function then call that function.
-
-
-AQI is always Very Unhealthy - see if it's a bug\
- -- Nope, Dark Sky just has a lousy air quality property.
-
-Build Readme.md
-//https://docs.airnowapi.org/
 
 * */

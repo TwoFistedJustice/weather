@@ -121,11 +121,31 @@ const getDefaultLocation = () => {
   return places.filter(test)[0];
 };
 
+const listLccations = () => {
+  let places = fetchLocations();
+  return places.sort(sortLocations)
+  };
+
+const sortLocations = (a, b) => {
+  let textA = a.nickname.toUpperCase();
+  let textB = b.nickname.toUpperCase();
+  if (textA < textB) {
+    return -1;
+  } else if (textA > textB) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+
+
 module.exports = {
   addPlace,
   deleteLocation,
   fetchLocations,
   fetchOneLocation,
   getDefaultLocation,
+  listLccations,
   setDefaultLocation
 };
