@@ -13,18 +13,18 @@ const nameOptions = {
   alias: 's'
 };
 
-// const deleteOptions = {
-//   describe: 'Enter a nickname to delete a saved location',
-//   demand: false,
-//   alias: 'del'
-// };
-
 const argv = yargs
   .options({
     a: {
       describe: 'Get weather for a given location. Use double quotes in Windows.',
       demand: false,
       alias: 'address',
+      string: true
+    },
+    g: {
+      describe: 'Get the weather for a saved location. Use double quotes in Windows.',
+      demand: false,
+      alias: 'get',
       string: true
     },
   })
@@ -37,7 +37,7 @@ const argv = yargs
   .argv;
 
 var command =argv._[0];
-// console.log('line 40', argv)
+console.log('line 34', argv)
 
   if (command === 'list') {
   console.log('app.js 38',places.fetchLocations());
@@ -45,7 +45,7 @@ var command =argv._[0];
     places.deleteLocation(argv.name)
   }
 
-if ( argv.a !== undefined) {
+if (argv.a !== undefined) {
   
   geo.fetchGeoData(argv.address)
     .then((response)=>{
@@ -64,8 +64,16 @@ if ( argv.a !== undefined) {
         console.log(err.message);
       }
     });
+} else if (argv.g !== undefined) {
+  let geoData = places.fetchOneLocation(argv.get);
+  
+  weather.fetchWeather(geoData)
+    .then((weatherData) =>{
+      displayWeatherReport(weatherData);
+    }).catch((err)=>{
+      console.log('saved location error:', err);
+  });
 }
-
 
 var displayWeatherReport = ( fetchedData) => {
   let uvHighTime = convertUnixtime(fetchedData.time.uvIndexTime);
@@ -97,15 +105,12 @@ var convertUnixtime = (unix_timestamp) =>{
 
 /* next up:
 
-
-
    * High Priority*
-* add ability to delete a location
-* add ability to so fetch weather from saved data, skipping the geo fetch entirely
+DONE   * add ability to delete a location
+DONE * add ability to so fetch weather from saved data, skipping the geo fetch entirely
 * add ability to make one location default so if no args passed in, it just gets weather for default
 
     *Low Priority*
 make list print each location on its own line and make it pretty
-
 
 * */

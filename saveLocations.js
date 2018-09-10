@@ -20,6 +20,30 @@ const fetchLocations = () => {
 };
 
 /*
+I: a string (the name of the saved location you want to retrieve)
+O: an object
+C: none
+E: the input is not saved to the local file
+What this fn does: It retrieves one set of location data from localhost
+Relationship btwn inputs and outputs: The output is parsed json data retrieved from localhost where the
+  name or nickname property matches the input.
+*/
+const fetchOneLocation = (placeName) => {
+
+  let places = fetchLocations();
+  let test = (item) => {
+    return item.name === placeName || item.nickname === placeName;
+  }
+  let place = places.filter(test);
+  
+  if(place.length === 1) {
+    return place[0];
+  } else {
+    return null;
+  }
+};
+
+/*
 I: geoData object, a string
 O: data saved to a file
 C: none
@@ -68,6 +92,7 @@ const deleteLocation = (placeName) => {
 module.exports = {
   addPlace,
   deleteLocation,
-  fetchLocations
+  fetchLocations,
+  fetchOneLocation
 };
 
