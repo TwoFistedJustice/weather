@@ -13,6 +13,12 @@ const nameOptions = {
   alias: 's'
 };
 
+// const deleteOptions = {
+//   describe: 'Enter a nickname to delete a saved location',
+//   demand: false,
+//   alias: 'del'
+// };
+
 const argv = yargs
   .options({
     a: {
@@ -24,16 +30,20 @@ const argv = yargs
   })
   .command('save', 'Save a place name on your local machine.', {name: nameOptions})
   .command('list', 'Display all saved places and their coordinates')
+  .command('delete', 'Enter a nickname to delete a saved location')
   .command('weather', 'Display the weather for the location you enter.')
   .help()
   .alias('help', 'h')
   .argv;
 
 var command =argv._[0];
+// console.log('line 40', argv)
 
   if (command === 'list') {
-  console.log('app.js 38',places.fetchLocation());
-}
+  console.log('app.js 38',places.fetchLocations());
+} else if (command === 'delete') {
+    places.deleteLocation(argv.name)
+  }
 
 if ( argv.a !== undefined) {
   
@@ -86,7 +96,16 @@ var convertUnixtime = (unix_timestamp) =>{
 
 
 /* next up:
+
+
+
+   * High Priority*
+* add ability to delete a location
+* add ability to so fetch weather from saved data, skipping the geo fetch entirely
+* add ability to make one location default so if no args passed in, it just gets weather for default
+
+    *Low Priority*
 make list print each location on its own line and make it pretty
-add ability to delete a location
-add ability to so fetch weather from saved data, skipping the geo fetch entirely
+
+
 * */

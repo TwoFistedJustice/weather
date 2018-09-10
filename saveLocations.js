@@ -10,7 +10,7 @@ E: none
 What this fn does: It reads location data from a file on the localhost and returns an object.
 Relationship btwn inputs and outputs: There are no inputs.
 */
-const fetchLocation = () => {
+const fetchLocations = () => {
   try {
     return JSON.parse(fs.readFileSync('places.json'));
   }
@@ -18,7 +18,6 @@ const fetchLocation = () => {
     return [];
   }
 };
-
 
 /*
 I: geoData object, a string
@@ -31,7 +30,7 @@ Relationship btwn inputs and outputs: The file written is the location data with
  Fn is called from geoData fetch in app.js
 */
 const addPlace = (location, nickname) => {
-  let places = fetchLocation();
+  let places = fetchLocations();
   let duplicates = [];
   
   var duplicateTest = (item) => {
@@ -48,11 +47,27 @@ const addPlace = (location, nickname) => {
   }
 };
 
-const deleteLocation = () => {};
+/*
+I: a string
+O: none
+C: input must be a saved location
+E: input location does not exist
+What this fn does: It searches the saved locations for the input string, and finding it removes it.
+Relationship btwn inputs and outputs: no outputs
+*/
+const deleteLocation = (placeName) => {
+  let places = fetchLocations();
+  let test =(item) => {
+    return (item.nickname !== placeName);
+  };
+  let filteredPlaces = places.filter(test);
+
+  fs.writeFileSync('./places.json', JSON.stringify(filteredPlaces, undefined, 2));
+};
 
 module.exports = {
   addPlace,
   deleteLocation,
-  fetchLocation
+  fetchLocations
 };
 
