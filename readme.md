@@ -1,3 +1,17 @@
+**SUMMARY**
+
+This is a small command line weather applet running on Node.js. It fetches the current
+weather for the location you give it. You can enter an actual address, a city, or a 
+postal code. It will tell you the current temperature, the apparent temperature, 
+the expected high temperature, the expected high UV Index, and what time to expect
+those highs to occur. It will also give you the current air quality for the location,
+based on US EPA guidelines.
+
+It was built for the purpose of learning Node.js. In real life you would probably be
+better served by just downloading a proper weather app for your phone. But if you really
+want to use it, I can't stop you, though I make no claims or warranties as the quality 
+of the forecast.
+
 **Dependencies you need to install:**
 
 Use whatever the latest version is. Nothing here is so complex that it should break with a new release.
@@ -64,7 +78,7 @@ Type `--name [the nickname of the location] home`
 Whatever you set to home, gets fetched when you pass no paramaters.
 
 
-**SUMMARY**
+**SUMMARY OF INTERFACE**
 
 Commands you begin with a hypen `-`
 * `-a` : gets weather for a given address or postal code. 
