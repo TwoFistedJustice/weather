@@ -46,8 +46,8 @@ type
 
 **LIST ALL SAVED LOCATIONS**
 
-To get a list of currently saved locations type `list`
-
+To get a list of currently saved locations type `list`  
+It displays them sorted by the nickname you gave them.
 
 **DELETE A SAVED LOCATION**
 Requires `--name` switch
