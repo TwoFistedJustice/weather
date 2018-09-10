@@ -19,6 +19,9 @@ Or if you are only going to run the app on your local machine
 you can just change the value of the variables "darkSkyKey"
 and "mapQuestKey" to the string value of the respective keys.
 
+**INSTALLING THE APP**  
+Extact the zip file to a location of your preference. Open the location in terminal.
+Install the dependencies using `npm` and the `--save` switch. 
 
 **USING THE APP**
 
