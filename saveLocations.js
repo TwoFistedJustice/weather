@@ -109,16 +109,6 @@ const setDefaultLocation = (nickname) => {
       item.default = false;
     }
   }
-  
-  // let setDefault = (item) => {
-  //   if (item.nickname !== placeName && item.default !== false) {
-  //     item.default = false;
-  //   } else if (item.nickname === placeName) {
-  //     item.default = true;
-  //   }
-  //   return item;
-  // };
-  // places = places.map(setDefault(item));
   fs.writeFileSync('./places.json', JSON.stringify(places, undefined, 2));
 };
 
@@ -128,9 +118,7 @@ const getDefaultLocation = () => {
   let test = (item) => {
     return item.default === true;
   };
-  
   return places.filter(test)[0];
-  
 };
 
 module.exports = {
@@ -140,6 +128,4 @@ module.exports = {
   fetchOneLocation,
   getDefaultLocation,
   setDefaultLocation
-  
 };
-
