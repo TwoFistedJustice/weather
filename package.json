@@ -1,0 +1,24 @@
+{
+  "name": "weatherappnode",
+  "version": "1.0.0",
+  "description": "a command line weather app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwoFistedJustice/weather.git"
+  },
+  "author": "Russ Bain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TwoFistedJustice/weather/issues"
+  },
+  "homepage": "https://github.com/TwoFistedJustice/weather#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.10",
+    "yargs": "^12.0.2"
+  }
+}
