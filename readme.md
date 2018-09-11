@@ -1,7 +1,7 @@
 **INTRODUCTION**
 
 This is a small command line weather applet running on Node.js. It fetches the current
-weather for the location you give it. You can enter an actual address, a city, or a 
+weather for the location you give it. You can enter a street address, a city, or a 
 postal code. It will tell you the current temperature, the apparent temperature, 
 the expected high temperature, the expected high UV Index, and what time to expect
 those highs to occur. It will also give you the current air quality for the location,
