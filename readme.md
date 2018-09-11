@@ -12,9 +12,8 @@ better served by just downloading a proper weather app for your phone. But if yo
 want to use it, I can't stop you, though I make no claims or warranties as the quality 
 of the forecast or advice.
 
-**Dependencies you need to install:**
+**Dependencies:**
 
-Use whatever the latest version is. Nothing here is so complex that it should break with a new release.
 * Node
 * Yargs
 * Lodash
@@ -36,7 +35,7 @@ you can just change the value of the variables `darkSkyKey`, `mapQuestKey`,
 
 **INSTALLING THE APP**  
 Extract the zip file to a location of your choice. Open the location in terminal.
-Install the dependencies using `npm` and the `--save` switch. 
+Install the dependencies using `npm install`. 
 
 **USING THE APP**
 
