@@ -9,7 +9,7 @@ based on US EPA guidelines.
 
 It was built for the purpose of learning Node.js. In real life you would probably be
 better served by just downloading a proper weather app for your phone. But if you really
-want to use it, I can't stop you, though I make no claims or warranties as the quality 
+want to use it, I can't stop you, though I make no claims or warranties as to the quality 
 of the forecast or advice.
 
 **Dependencies:**
