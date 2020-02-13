@@ -40,7 +40,7 @@ var fetchWeather = (geoData) => {
       if(err.code === 'ENOTFOUND') {
         console.log("Unable to connect to Dark Sky server.");
       } else {
-        console.log(err.message);
+        console.log("Unable to connect to Dark Sky server.\n" + err.message);
       }
     });
 };
