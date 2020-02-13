@@ -12,6 +12,10 @@ better served by just downloading a proper weather app for your phone. But if yo
 want to use it, I can't stop you, though I make no claims or warranties as to the quality 
 of the forecast or advice.
 
+**Versioning**
+
+[This app uses semantic versioning as defined at semver.org](https://semver.org/) 
+
 **Dependencies:**
 
 * Node
