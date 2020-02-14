@@ -121,7 +121,7 @@ const getDefaultLocation = () => {
   return places.filter(test)[0];
 };
 
-const listLccations = () => {
+const listLocations = () => {
   let places = fetchLocations();
   return places.sort(sortLocations)
   };
@@ -146,6 +146,6 @@ module.exports = {
   fetchLocations,
   fetchOneLocation,
   getDefaultLocation,
-  listLccations,
+  listLocations,
   setDefaultLocation
 };

@@ -90,7 +90,7 @@ const convertUnixtime = (unix_timestamp) =>{
 
 
 if (command === 'list') {
-    let list = places.listLccations();
+    let list = places.listLocations();
     displayList(list);
 } else if (command === 'delete') {
     places.deleteLocation(argv.name)
