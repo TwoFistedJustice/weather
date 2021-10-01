@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/TwoFistedJustice/weather#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.4",
     "lodash": "^4.17.15",
     "yargs": "^15.1.0"
   }
